@@ -55,7 +55,7 @@ let step= (way)=> {
         snake.unshift(headPosition);
      } else {
          alert(score.textContent);
-         table.childNodes.forEach(el => el.childNodes.forEach(inEl=>inEl.className=''));
+         table.childNodes.forEach(el => el.className='');
          iniPosition();
     }
 }
