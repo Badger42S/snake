@@ -1,0 +1,35 @@
+div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-self: center;
+}
+table{
+    border-collapse: collapse;
+}
+td,tr{
+    width: 15px;
+    height: 15px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+}
+button{
+    width: 120px;
+    height: 75px;
+    margin: 10px;
+    font: 2rem sans-serif;
+}
+p {
+    font: 2em sans-serif;
+}
+.select {
+    background-color: red;
+}
+.food {
+    background-color: green;
+}
+.control{
+    flex-direction: row;
+}
