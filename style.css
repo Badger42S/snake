@@ -1,19 +1,13 @@
-div {
+.main-container {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-self: center;
 }
-table{
-    border-collapse: collapse;
-}
-td,tr{
-    width: 15px;
-    height: 15px;
-    border: 1px solid black;
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
+section{
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
 }
 button{
     width: 120px;
@@ -32,4 +26,9 @@ p {
 }
 .control{
     flex-direction: row;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(19,20px);
+    grid-template-rows: repeat(19, 20px);
 }
