@@ -1,96 +1,4 @@
 /*
-const table = document.getElementById("grid");
-const fasterBtoon = document.getElementById("faster");
-const slowerBtoon = document.getElementById("slower");
-const score = document.getElementById('score');
-
-let headPosition = 2;
-let snake = [];
-const FIELD_LENGTH =19; 
-let isFood =false;
-let direction = "ArrowRight";
-let speed = 1000;
-let timer;
-let fastCounter =1;
-
-let acceleration =()=>{
-    if (fastCounter<3) {
-        fastCounter++;
-    } else {
-        fastCounter=1;
-        fasterBtoon.click();
-    }
-};
-
-let step= (way)=> {
-    let privState =headPosition;
-    let rowFail =false;
-    switch (way) {
-        case 'ArrowUp':
-             headPosition-=FIELD_LENGTH;
-            break;
-        case 'ArrowRight':
-            headPosition+=1;
-            rowFail = (headPosition%(FIELD_LENGTH) === 0) && (privState%(FIELD_LENGTH) === 18);
-            break;
-        case 'ArrowDown':
-            headPosition+=FIELD_LENGTH;
-            break;
-        case 'ArrowLeft':
-            headPosition-=1;
-            rowFail = (privState%(FIELD_LENGTH) === 0) && (headPosition%(FIELD_LENGTH) === 18);
-            break;
-        default:
-            break;
-    };
-    let nextCell =document.getElementById(headPosition);
-    if (!!nextCell && nextCell.className !== 'select' && !rowFail) {
-        if (nextCell.className !== 'food') {
-         document.getElementById(snake.pop()).className = '';
-        } else {
-         isFood =false;
-         score.textContent=+score.textContent+1100-speed;
-         acceleration();
-        }
-        document.getElementById(headPosition).className = 'select';
-        snake.unshift(headPosition);
-     } else {
-         alert(score.textContent);
-         table.childNodes.forEach(el => el.className='');
-         iniPosition();
-    }
-}
-
-const randomCel =() =>{ return Math.round(Math.random() * (FIELD_LENGTH)*(FIELD_LENGTH))};
-let foodForSnake =(moveSpeed) =>{
-    clearInterval(timer);
-    timer=setInterval(()=>{
-        step(direction);
-        if (!isFood) {
-            let food =randomCel();
-            while (document.getElementById(food).className === 'select') {
-                food = randomCel();
-            }
-            console.log(food);
-                document.getElementById(food).className='food';  
-            isFood =true;
-        }
-    }, moveSpeed);
-}
-
-fasterBtoon.addEventListener('click', ()=>{
-    if (speed>100) {
-        speed-=100;
-        foodForSnake(speed);
-    }
-})
-
-slowerBtoon.addEventListener('click', ()=>{
-    if (speed<1000) {
-        speed+=100;
-        foodForSnake(speed);
-    }
-})
 
 let iniPosition =() => {for (let i = 0; i < 3; i++) {
     let startPosition = document.getElementById(i);
@@ -104,37 +12,12 @@ let iniPosition =() => {for (let i = 0; i < 3; i++) {
     foodForSnake(speed);
 }};
 
-for(let i=0; i<361; i++) {
-    let newCell = document.createElement('section');
-    newCell.id = i;
-    table.appendChild(newCell);
-}
-
-document.addEventListener("keydown", function(event) {
-    switch (event.key) {
-        case 'ArrowUp':
-             direction='ArrowUp';
-            break;
-        case 'ArrowRight':
-            direction='ArrowRight';
-            break;
-        case 'ArrowDown':
-            direction='ArrowDown';
-            break;
-        case 'ArrowLeft':
-            direction='ArrowLeft';
-            break;
-        default:
-            break;
-    };
- });
-
-iniPosition();
 */
 class Field {
     height;
     with;
     fieldObject;
+    food;
 
     constructor() {
         this.height =19;
@@ -146,6 +29,7 @@ class Field {
     randomCel = () => Math.round(Math.random() * (this.with)*(this.height));
 
     setFoodPoint(point) {
+        this.food=point;
         this.fieldObject.children[point].className = 'food';
     };
 
@@ -157,23 +41,19 @@ class Field {
         };
     };
 
-    renderSnake(shape) {
-        let oldSnake = document.querySelectorAll('.snake');
-        oldSnake.forEach(el => {
-            el.className = '';
-        });
-        shape.forEach(id => {
-            this.fieldObject.children[id].className='snake';
-        });
+    clear() {
+        this.fieldObject.childNodes.forEach(ch=>ch.className='');
     }
 };
 
 class Snake {
     shape=[];
     constructor() {
-        this.shape = [2,1,0];
+        this.reset();
     };
-
+    reset() {
+        this.shape = [2,1,0];
+    }
     crossSection(dot) {
         return this.shape.includes(dot);
     };
@@ -194,22 +74,50 @@ class Game {
     fasterButton;
     slowerButton;
     timer;
+    counter;
+
     constructor(field, snake) {
         this.field=field;
         this.snake=snake;
-        this.speed=1000;
-        this.direction="ArrowRight";
         this.timer = null;
+        this.counter=0;
         this.score = document.getElementById('score');;
         this.fasterButton = document.getElementById("faster");
         this.slowerButton = document.getElementById("slower");
         document.addEventListener('keydown', this.switchDirection);
+        this.fasterButton.addEventListener('click', this.faster);
+        this.slowerButton.addEventListener('click', this.slower);
     };
 
     initGame() {
         this.field.createField();
-        this.field.renderSnake(snake.shape);
     };
+
+    startGame() {
+        this.speed=1000;
+        this.direction="ArrowRight";
+        this.snake.reset();
+        this.field.clear();
+        this.renderSnake(this.snake.shape);
+        this.setTimerSpeed();
+        this.putFood();
+    }
+
+    faster=()=>{
+        if (this.speed>100) {
+            this.speed-=100;
+            this.setTimerSpeed();
+        }
+        console.log(this.speed);
+    }
+
+    slower=()=>{
+        if (this.speed<1000) {
+            this.speed+=100;
+            this.setTimerSpeed();
+        }
+        console.log(this.speed);
+    }
 
     switchDirection=(event) =>{
         switch (event.key) {
@@ -228,7 +136,6 @@ class Game {
             default:
                 break;
         };
-        this.step();
     }
 
     putFood() {
@@ -240,25 +147,26 @@ class Game {
         this.field.setFoodPoint(foodPoint);
     };
 
-    acceleration () {
-        if (fastCounter<3) {
-            fastCounter++;
+    acceleration() {
+        if (this.counter<3) {
+            this.counter++;
         } else {
-            fastCounter=1;
-            fasterBtoon.click();
+            this.counter=1;
+            this.fasterButton.click();
         };
     };
 
-    setTimerSpeed() {
+    setTimerSpeed=()=> {
         clearInterval(this.timer);
-        setInterval(step, this.speed);
+        this.timer = setInterval(this.step, this.speed);
     }
 
     step = () => {
         let rowFail = false;
-        let checkSnakeAfter;
-        let checkSnakeBefore;
+        const snakeTail = this.snake.shape[this.snake.shape.length-1];
         this.snake.move();
+        let checkSnakeAfter;
+        const checkSnakeBefore = this.snake.shape[1]%this.field.with;
         switch (this.direction) {
             case 'ArrowUp':
                 this.snake.shape[0]-=this.field.with;
@@ -266,7 +174,6 @@ class Game {
             case 'ArrowRight':
                 this.snake.shape[0]+=1;
                 checkSnakeAfter = this.snake.shape[0]%this.field.with;
-                checkSnakeBefore = this.snake.shape[1]%this.field.with;
                 rowFail = (checkSnakeAfter === 0) && (checkSnakeBefore === this.field.with-1);
                 break;
             case 'ArrowDown':
@@ -275,30 +182,34 @@ class Game {
             case 'ArrowLeft':
                 this.snake.shape[0]-=1;
                 checkSnakeAfter = this.snake.shape[0]%this.field.with;
-                checkSnakeBefore = this.snake.shape[1]%this.field.with;
                 rowFail = (checkSnakeBefore === 0) && (checkSnakeAfter === this.field.with-1);
                 break;
             default:
                 break;
         };
-        console.log(rowFail);
         let nextCell =document.getElementById(this.snake.shape[0]);
-        // if (!!nextCell && nextCell.className !== 'snake' && !rowFail) {
-        //     if (nextCell.className !== 'food') {
-        //     document.getElementById(snake.pop()).className = '';
-        //     } else {
-        //     isFood =false;
-        //     score.textContent=+score.textContent+1100-speed;
-        //     acceleration();
-        //     }
-        //     document.getElementById(headPosition).className = 'select';
-        //     snake.unshift(headPosition);
-        // } else {
-        //     alert(score.textContent);
-        //     table.childNodes.forEach(el => el.className='');
-        //     iniPosition();
-        // }
-        this.field.renderSnake(snake.shape);
+        if (!!nextCell && nextCell.className !== 'snake' && !rowFail) {
+            if (this.snake.shape[0] ===  this.field.food) {
+                this.snake.shape.push(snakeTail);
+                document.getElementById(snakeTail).className='snake';
+                document.getElementById(this.field.food).className='snake';
+                this.putFood();
+                this.score.textContent=+this.score.textContent+1100-this.speed;
+                this.acceleration();
+            } else {
+                document.getElementById(snakeTail).className='';
+                document.getElementById(this.snake.shape[0]).className='snake';
+            }
+        } else {
+            alert(this.score.textContent);
+            this.startGame()
+        }
+    }
+
+    renderSnake(shape) {
+        shape.forEach(id => {
+            this.field.fieldObject.children[id].className='snake';
+        });
     }
 }
 
@@ -307,3 +218,4 @@ const snake = new Snake();
 const game = new Game(field, snake);
 
 game.initGame();
+game.startGame();
