@@ -30,6 +30,7 @@ class Field {
         this.snake.reset();
         this.fieldObject.childNodes.forEach(ch=>ch.className='');
         this.putFood();
+        this.drawSnake();
     }
 
     randomCel(){
@@ -42,6 +43,12 @@ class Field {
             this.foodPoint = this.randomCel();
         };
         this.fieldObject.children[this.foodPoint].className = 'food';
+    }
+
+    drawSnake() {
+        this.snake.shape.forEach(id => {
+            this.fieldObject.children[id].className='snake';
+        });
     }
 
     renderMovie(direction) {
@@ -71,17 +78,14 @@ class Field {
         if (!!nextCell && nextCell.className !== 'snake' && !fail) {
             if (this.snake.shape[0] !==  this.foodPoint) {
                 document.getElementById(snakeTail).className='';
-                document.getElementById(this.snake.shape[0]).className='snake';
             } else {
                 this.snake.shape.push(snakeTail);
-                document.getElementById(snakeTail).className='snake';
-                document.getElementById(this.foodPoint).className='snake';
+                //document.getElementById(snakeTail).className='snake';
+                //document.getElementById(this.foodPoint).className='snake';
                 this.putFood();
                 score = true;
             }
-            this.snake.shape.forEach(id => {
-                this.fieldObject.children[id].className='snake';
-            });
+            document.getElementById(this.snake.shape[0]).className='snake';
         } else {
             fail=true;
         }
