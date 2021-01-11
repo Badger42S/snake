@@ -1,9 +1,3 @@
-.main-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-self: center;
-}
 section{
     width: 20px;
     height: 20px;
@@ -15,8 +9,23 @@ button{
     margin: 10px;
     font: 2rem sans-serif;
 }
-p {
-    font: 2em sans-serif;
+p,label,input{
+    font: 1.2rem sans-serif;
+    margin: 10px;
+}
+input{
+    width: 100px;
+}
+p{
+    font: 2rem sans-serif;
+}
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 650px;
 }
 .snake {
     background-color: red;
@@ -29,6 +38,5 @@ p {
 }
 .grid {
     display: grid;
-    grid-template-columns: repeat(19,20px);
-    grid-template-rows: repeat(19, 20px);
+    grid-gap: 3px;
 }
