@@ -19,6 +19,11 @@ input{
 p{
     font: 2rem sans-serif;
 }
+button {
+    border: none;
+    border-radius: 12px;
+    background-color: rgb(70, 179, 28);
+}
 .main-container {
     display: flex;
     flex-direction: column;
@@ -26,6 +31,7 @@ p{
     align-items: center;
     margin: auto;
     width: 650px;
+    border: 2px solid #000;
 }
 .snake {
     background-color: red;
@@ -34,6 +40,7 @@ p{
     background-color: green;
 }
 .control{
+    display: flex;
     flex-direction: row;
 }
 .grid {

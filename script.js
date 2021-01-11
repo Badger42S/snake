@@ -119,6 +119,7 @@ class Game {
     speed;
     direction;
     score;
+    speedLabel;
     fieldWidth;
     fieldHeight;
     fasterButton;
@@ -131,7 +132,8 @@ class Game {
         this.field=field;
         this.timer = null;
         this.counter=0;
-        this.score = document.getElementById('score');;
+        this.score = document.getElementById('score');
+        this.speedLabel = document.getElementById('speed');
         this.fasterButton = document.getElementById("faster");
         this.slowerButton = document.getElementById("slower");
         this.fieldHeight = document.getElementById('height');
@@ -149,6 +151,8 @@ class Game {
 
     startGame() {
         this.speed=1000;
+        this.showSpeed();
+        this.score.textContent=0;
         this.direction="ArrowRight";
         this.field.resetField();
         this.setTimerSpeed();
@@ -159,6 +163,7 @@ class Game {
             this.speed-=100;
             this.setTimerSpeed();
         }
+        this.showSpeed();
         console.log(this.speed);
     }
 
@@ -167,7 +172,12 @@ class Game {
             this.speed+=100;
             this.setTimerSpeed();
         }
+        this.showSpeed();
         console.log(this.speed);
+    }
+
+    showSpeed() {
+        this.speedLabel.textContent = (1100-this.speed)/100;
     }
 
     size =()=>{
@@ -182,7 +192,6 @@ class Game {
             this.field.width = width;
         }
         this.field.createField();
-        this.field.resetField();
         this.startGame();
     }
 
