@@ -34,7 +34,7 @@ class Field {
     }
 
     randomCel(){
-        return  Math.round(Math.random() * (this.width)*(this.height))
+        return  Math.round(Math.random() * (this.width*this.height -1))
     };
 
     putFood() {
@@ -59,9 +59,11 @@ class Field {
         switch (direction) {
             case 'ArrowUp':
                 this.snake.shape[0]-=this.width;
+                fail = this.snake.shape[0] < 0;
                 break;
             case 'ArrowDown':
                 this.snake.shape[0]+=this.width;
+                fail = this.snake.shape[0] > (this.width)*(this.height)-1;
                 break;
             case 'ArrowRight':
                 fail = this.snake.shape[0]%this.width === this.width-1;
@@ -74,14 +76,12 @@ class Field {
             default:
                 break;
         };
-        let nextCell =document.getElementById(this.snake.shape[0]);
-        if (!!nextCell && nextCell.className !== 'snake' && !fail) {
+        const nextCell = this.snake.shape.lastIndexOf(this.snake.shape[0]) === 0;
+        if (nextCell && !fail) {
             if (this.snake.shape[0] !==  this.foodPoint) {
                 document.getElementById(snakeTail).className='';
             } else {
                 this.snake.shape.push(snakeTail);
-                //document.getElementById(snakeTail).className='snake';
-                //document.getElementById(this.foodPoint).className='snake';
                 this.putFood();
                 score = true;
             }
